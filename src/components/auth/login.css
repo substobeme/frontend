@@ -1,0 +1,125 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f3f4f6;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    background: 
+    linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+    url('iiitb.jpg') no-repeat center center fixed; 
+    background-size: cover;
+    align-items: center;
+  }
+  
+  .login-box {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .logo-container {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .logo-container img {
+    width: 120px;  
+    height: 120px; 
+    object-fit: contain;
+  }
+  
+  h2 {
+    text-align: center;
+    color: #333;
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .error-message {
+    color: red;
+    text-align: center;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    width: 100%; 
+  }
+  
+  input {
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    width: 100%;
+    background-color: #f9f9f9;
+    color: #555;
+    box-sizing: border-box;
+  }
+  
+
+  input::placeholder {
+    color: #aaa;
+  }
+ 
+  input:focus {
+    outline: none;
+    border-color: #3498db;
+    background-color: #f1f5f9;
+  }
+
+  input:hover {
+    background-color: #e2e8f0;
+  }
+  
+  input:focus:hover {
+    background-color: #cbd5e1;
+  }
+  
+  button {
+    padding: 0.75rem;
+    background-color: #2112c4;
+    color: white;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%; 
+  }
+  
+  button:hover {
+    background-color: #2980b9;
+  }
+  
+  .register-link {
+    text-align: center;
+    font-size: 0.875rem;
+    margin-top: 1rem;
+  }
+  
+  .register-link button {
+    background: none;
+    border: none;
+    color: #3498db;
+    cursor: pointer;
+  }
+  
+  .register-link button:hover {
+    text-decoration: underline;
+    color: #2980b9;
+  }
+  
