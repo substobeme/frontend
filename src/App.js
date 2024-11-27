@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import { authService } from './services/authService';
+import Dashboard from './components/auth/dashboard';
 
-// A simple protected route component
 const PrivateRoute = ({ children }) => {
   return authService.isAuthenticated() ? children : <Navigate to="/login" />;
 };
@@ -16,17 +16,11 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          
-          
-          <Route 
-            path="/dashboard" 
-            element={
-              <PrivateRoute>
-                <div>Dashboard (Protected Route)</div>
-              </PrivateRoute>
-            } 
-          />
-          
+
+          <Route
+            path="/dashboard"
+            element={<PrivateRoute> <Dashboard /> </PrivateRoute>} />
+
           <Route path="/" element={<Navigate to="/login" />} />
         </Routes>
       </div>

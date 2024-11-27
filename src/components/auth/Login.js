@@ -12,18 +12,17 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError(''); try {
+      const token = await authService.login(email, password); 
+      localStorage.setItem('token', token);
+      console.log('Token:', token);
 
-    try {
-      await authService.login(email, password);
-      navigate('/dashboard');
+      navigate('/dashboard'); 
     } catch (err) {
       console.error('Login Catch Block:', err);
-      
-      // More specific error messaging
+
       if (err.response) {
-        // Server responded with an error
-        switch(err.response.status) {
+        switch (err.response.status) {
           case 401:
             setError('Invalid email or password');
             break;
@@ -34,14 +33,15 @@ const Login = () => {
             setError('Login failed. Please try again.');
         }
       } else if (err.message) {
-        // Network error or other error
         setError(err.message);
       } else {
         setError('An unexpected error occurred');
       }
     }
   };
+
   const handleFocus = () => {
+    
     if (error) {
       setError('');
     }
@@ -50,7 +50,6 @@ const Login = () => {
   return (
     <div className="container">
       <div className="login-box">
-        {/* Logo Section */}
         <div className="logo-container">
           <img src="/IIIT_Bangalore_Logo.svg.png" alt="Logo" />
         </div>
@@ -60,7 +59,6 @@ const Login = () => {
         {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleSubmit}>
-        
           <input
             type="email"
             id="email"
@@ -71,7 +69,6 @@ const Login = () => {
             required
           />
 
-          
           <input
             type="password"
             id="password"
@@ -82,7 +79,6 @@ const Login = () => {
             required 
           />
 
-         
           <button
             type="submit"
           >
@@ -90,9 +86,8 @@ const Login = () => {
           </button>
         </form>
 
-       
         <p>
-          Already have an account? 
+          Don't have an account? 
           <Link to="/register" className="register-link">Register</Link>
         </p>
       </div>
