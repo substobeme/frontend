@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../../services/authService';
 import './login.css';  
+import { Link } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -15,9 +16,29 @@ const Login = () => {
 
     try {
       await authService.login(email, password);
-      navigate('/dashboard'); // Redirect to dashboard after successful login
+      navigate('/dashboard');
     } catch (err) {
-      setError('Login failed. Please check your credentials.');
+      console.error('Login Catch Block:', err);
+      
+      // More specific error messaging
+      if (err.response) {
+        // Server responded with an error
+        switch(err.response.status) {
+          case 401:
+            setError('Invalid email or password');
+            break;
+          case 404:
+            setError('User not found');
+            break;
+          default:
+            setError('Login failed. Please try again.');
+        }
+      } else if (err.message) {
+        // Network error or other error
+        setError(err.message);
+      } else {
+        setError('An unexpected error occurred');
+      }
     }
   };
   const handleFocus = () => {
@@ -33,16 +54,13 @@ const Login = () => {
         <div className="logo-container">
           <img src="/IIIT_Bangalore_Logo.svg.png" alt="Logo" />
         </div>
-        
-        {/* Heading */}
-        <h2>Login as Employee</h2>
+   
+        <h2>Welcome Back to Portal</h2>
 
-        {/* Error Message */}
         {error && <div className="error-message">{error}</div>}
 
-        {/* Login Form */}
         <form onSubmit={handleSubmit}>
-          {/* Email Input */}
+        
           <input
             type="email"
             id="email"
@@ -53,7 +71,7 @@ const Login = () => {
             required
           />
 
-          {/* Password Input */}
+          
           <input
             type="password"
             id="password"
@@ -64,7 +82,7 @@ const Login = () => {
             required 
           />
 
-          {/* Submit Button */}
+         
           <button
             type="submit"
           >
@@ -72,14 +90,10 @@ const Login = () => {
           </button>
         </form>
 
-        {/* Register Link */}
-        <p className="register-link">
-          Don't have an account? 
-          <button
-            onClick={() => navigate('/register')}
-          >
-            Register
-          </button>
+       
+        <p>
+          Already have an account? 
+          <Link to="/register" className="register-link">Register</Link>
         </p>
       </div>
     </div>

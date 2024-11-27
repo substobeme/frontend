@@ -8,16 +8,35 @@ export const authService = {
       const response = await axios.post(`${BASE_URL}/api/v1/auth/login`, {
         email,
         password
+      }, {
+        // Explicitly handle different status codes
+        validateStatus: function (status) {
+          return status === 200 || status === 401;
+        }
       });
       
-  
-      if (response.data) {
+      // Log the full response for debugging
+      console.log('Login Response:', response);
+
+     
+      if (response.status === 200) {
+       
         localStorage.setItem('token', response.data);
         return response.data;
+      } else if (response.status === 401) {
+        
+        console.error('Login failed: Unauthorized');
+        throw new Error('Invalid credentials');
       }
-      return null;
     } catch (error) {
-      console.error('Login failed:', error.response?.data || error.message);
+     
+      console.error('Login Error:', error);
+     
+      if (error.response) {
+        console.error('Error Response:', error.response.data);
+        console.error('Error Status:', error.response.status);
+      }
+      
       throw error;
     }
   },

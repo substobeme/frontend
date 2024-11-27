@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../../services/authService';
+import './Register.css';
+import { Link } from 'react-router-dom';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -9,7 +11,7 @@ const Register = () => {
     email: '',
     password: '',
     title: '',
-    department: null,
+    department: '',
     photograph_path: ''
   });
   const [error, setError] = useState('');
@@ -17,9 +19,9 @@ const Register = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -35,102 +37,99 @@ const Register = () => {
     }
   };
 
+  const handleFocus = () => {
+    if (error) {
+      setError('');
+    }
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
-        {error && <div className="text-red-500 mb-4">{error}</div>}
+    <div className="container">
+      <div className="register-box">
+        {/* Logo Section */}
+        <div className="logo-container">
+          <img src="/IIIT_Bangalore_Logo.svg.png" alt="Logo" />
+        </div>
+
+        <h2>Register as Employee</h2>
+        {error && <div className="error-message">{error}</div>}
+
         <form onSubmit={handleSubmit}>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="first_name" className="block text-gray-700 mb-2">First Name</label>
-              <input
-                type="text"
-                id="first_name"
-                name="first_name"
-                value={formData.first_name}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded-lg"
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="last_name" className="block text-gray-700 mb-2">Last Name</label>
-              <input
-                type="text"
-                id="last_name"
-                name="last_name"
-                value={formData.last_name}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded-lg"
-                required
-              />
-            </div>
-          </div>
-          <div className="mt-4">
-            <label htmlFor="email" className="block text-gray-700 mb-2">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border rounded-lg"
-              required
-            />
-          </div>
-          <div className="mt-4">
-            <label htmlFor="password" className="block text-gray-700 mb-2">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border rounded-lg"
-              required
-              minLength="6"
-              maxLength="12"
-            />
-          </div>
-          <div className="mt-4">
-            <label htmlFor="title" className="block text-gray-700 mb-2">Title</label>
+          <div className="form-group">
             <input
               type="text"
-              id="title"
-              name="title"
-              value={formData.title}
+              id="first_name"
+              name="first_name"
+              value={formData.first_name}
               onChange={handleChange}
-              className="w-full px-3 py-2 border rounded-lg"
+              placeholder="First Name"
+              onFocus={handleFocus}
+              required
             />
-          </div>
-          <div className="mt-4">
-            <label htmlFor="department" className="block text-gray-700 mb-2">Department ID</label>
             <input
-              type="number"
-              id="department"
-              name="department"
-              value={formData.department || ''}
+              type="text"
+              id="last_name"
+              name="last_name"
+              value={formData.last_name}
               onChange={handleChange}
-              className="w-full px-3 py-2 border rounded-lg"
+              placeholder="Last Name"
+              onFocus={handleFocus}
+              required
             />
           </div>
-          <button
-            type="submit"
-            className="w-full mt-6 bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition"
-          >
-            Register
-          </button>
+
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="Email Address"
+            onFocus={handleFocus}
+            required
+          />
+
+          <input
+            type="password"
+            id="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Password"
+            onFocus={handleFocus}
+            required
+            minLength="6"
+            maxLength="12"
+          />
+
+          <input
+            type="text"
+            id="title"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+            placeholder="Title"
+            onFocus={handleFocus}
+          />
+
+          <input
+            type="number"
+            id="department"
+            name="department"
+            value={formData.department}
+            onChange={handleChange}
+            placeholder="Department ID"
+            onFocus={handleFocus}
+          />
+
+          <button type="submit">Register</button>
         </form>
-        <p className="mt-4 text-center">
-          Already have an account? 
-          <button 
-            onClick={() => navigate('/login')} 
-            className="text-blue-500 ml-2 hover:underline"
-          >
-            Login
-          </button>
+
+        <p>
+        Already have an account?{' '}
+        <Link to="/login" className="login-link">Login</Link>
         </p>
+
       </div>
     </div>
   );
