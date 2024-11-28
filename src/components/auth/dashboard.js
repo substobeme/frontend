@@ -99,9 +99,6 @@ const Dashboard = () => {
         onChange={(e) => setKeyword(e.target.value)}
         className="search-input"
       />
-      <button type="submit" className="search-button">
-        <i className="fa fa-search">&nbsp;Search</i>
-      </button>
     </form>
   </div>
   <div className="placement-filter">
