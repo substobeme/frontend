@@ -25,7 +25,8 @@ const Dashboard = () => {
       setStudents(response.data);
     } catch (err) {
       console.error(err);
-      setError('Error fetching student data');
+      localStorage.removeItem('token')
+      navigate('/Login');
     }
   };
 
