@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { authService } from '../services/authService';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './dashboard.css';
@@ -61,9 +62,9 @@ const Dashboard = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/');
+    authService.logout(navigate);
   };
+  
 
   const handleFilterChange = (e) => {
     setPlacementFilter(e.target.value);
