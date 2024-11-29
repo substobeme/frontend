@@ -91,10 +91,7 @@ const Dashboard = () => {
   };
 
   const filteredStudents = students.filter(student => {
-    // Filter by placement status
     if (placementFilter && student[10] !== placementFilter) return false;
-    
-    // Filter by alumni status (Yes/No)
     if (alumniFilter && (alumniFilter === 'Yes' ? !student[9] : student[9])) return false;
 
     return true;
