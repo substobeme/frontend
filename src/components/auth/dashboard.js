@@ -11,6 +11,7 @@ const Dashboard = () => {
   const [keyword, setKeyword] = useState('');
   const [error, setError] = useState('');
   const [placementFilter, setPlacementFilter] = useState('');
+  const [alumniFilter, setAlumniFilter] = useState('');
   const navigate = useNavigate();
 
   const isTokenExpired = (token) => {
@@ -85,9 +86,18 @@ const Dashboard = () => {
     setPlacementFilter(e.target.value);
   };
 
+  const handleAlumniFilterChange = (e) => {
+    setAlumniFilter(e.target.value);
+  };
+
   const filteredStudents = students.filter(student => {
-    if (placementFilter === '') return true;
-    return student[10] === placementFilter;
+    // Filter by placement status
+    if (placementFilter && student[10] !== placementFilter) return false;
+    
+    // Filter by alumni status (Yes/No)
+    if (alumniFilter && (alumniFilter === 'Yes' ? !student[9] : student[9])) return false;
+
+    return true;
   });
 
   return (
@@ -126,6 +136,18 @@ const Dashboard = () => {
             <option value="">All Students</option>
             <option value="Placed">Placed</option>
             <option value="Unplaced">Unplaced</option>
+          </select>
+        </div>
+
+        <div className="alumni-filter">
+          <select
+            value={alumniFilter}
+            onChange={handleAlumniFilterChange}
+            className="filter-select"
+          >
+            <option value="">All Students</option>
+            <option value="Yes">Alumni</option>
+            <option value="No">Not Alumni</option>
           </select>
         </div>
       </div>
