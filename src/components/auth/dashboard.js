@@ -92,7 +92,7 @@ const Dashboard = () => {
 
   const filteredStudents = students.filter(student => {
     if (placementFilter && student[10] !== placementFilter) return false;
-    if (alumniFilter && (alumniFilter === 'Yes' ? !student[9] : student[9])) return false;
+    if (alumniFilter && (alumniFilter === 'Yes' ? student[9] !== 'Yes' : student[9] !== 'No')) return false;
 
     return true;
   });
