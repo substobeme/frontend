@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './dashboard.css';
 import iiitbLogo from './logo.png';
+import { jwtDecode } from 'jwt-decode';
 
 const Dashboard = () => {
   const [students, setStudents] = useState([]);
@@ -12,38 +13,53 @@ const Dashboard = () => {
   const [placementFilter, setPlacementFilter] = useState('');
   const navigate = useNavigate();
 
-  const fetchStudents = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        navigate('/');
-        return;
-      }
+  const isTokenExpired = (token) => {
+    const decodedToken = jwtDecode(token);
+    const currentTime = Date.now() / 1000; 
+    return decodedToken.exp < currentTime;
+  };
 
+  const fetchStudents = async () => {
+    const token = authService.isAuthenticated();
+    if (!token || isTokenExpired(token)) {
+      authService.logout(navigate);
+      return false;
+    }
+
+    try {
       const response = await axios.get('http://localhost:9001/student', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setStudents(response.data);
+      return true;
     } catch (err) {
       console.error(err);
-      localStorage.removeItem('token')
-      navigate('/Login');
+      authService.logout(navigate);
+      return false;
     }
   };
 
   useEffect(() => {
-    fetchStudents();
+    if (!fetchStudents()) return;
+    
+    const interval = setInterval(() => {
+      if (!fetchStudents()) {
+        clearInterval(interval);
+      }
+    }, 60000); 
+
+    return () => clearInterval(interval);
   }, []);
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        navigate('/');
-        return;
-      }
+    const token = authService.isAuthenticated();
+    if (!token || isTokenExpired(token)) {
+      navigate('/');
+      return;
+    }
 
+    try {
       const response = await axios.get(`http://localhost:9001/student/${keyword}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -64,7 +80,6 @@ const Dashboard = () => {
   const handleLogout = () => {
     authService.logout(navigate);
   };
-  
 
   const handleFilterChange = (e) => {
     setPlacementFilter(e.target.value);
@@ -90,32 +105,30 @@ const Dashboard = () => {
       </div>
 
       <div className="search-container">
-  <div className="search-wrapper">
-    <form onSubmit={handleSearch} className="search-form">
-      <input
-        type="text"
-        placeholder="Search by keyword..."
-        value={keyword}
-        onFocus={handleSearchFocus}
-        onChange={(e) => setKeyword(e.target.value)}
-        className="search-input"
-      />
-    </form>
-  </div>
-  <div className="placement-filter">
-    <select 
-      value={placementFilter} 
-      onChange={handleFilterChange} 
-      className="filter-select"
-    >
-      <option value="">All Students</option>
-      <option value="Placed">Placed</option>
-      <option value="Unplaced">Unplaced</option>
-    </select>
-  </div>
-</div>
-
-      
+        <div className="search-wrapper">
+          <form onSubmit={handleSearch} className="search-form">
+            <input
+              type="text"
+              placeholder="Search by keyword..."
+              value={keyword}
+              onFocus={handleSearchFocus}
+              onChange={(e) => setKeyword(e.target.value)}
+              className="search-input"
+            />
+          </form>
+        </div>
+        <div className="placement-filter">
+          <select
+            value={placementFilter}
+            onChange={handleFilterChange}
+            className="filter-select"
+          >
+            <option value="">All Students</option>
+            <option value="Placed">Placed</option>
+            <option value="Unplaced">Unplaced</option>
+          </select>
+        </div>
+      </div>
 
       {error && <div className="error-message">{error}</div>}
 
