@@ -142,9 +142,9 @@ const Dashboard = () => {
             onChange={handleAlumniFilterChange}
             className="filter-select"
           >
-            <option value="">All Students</option>
-            <option value="Yes">Alumni</option>
-            <option value="No">Not Alumni</option>
+            <option value="">Alumni Status</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
           </select>
         </div>
       </div>
